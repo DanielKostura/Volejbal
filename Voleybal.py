@@ -28,6 +28,20 @@ class volleyball_court(Frame):
         new = tk.Frame.__init__(self)
         new = Toplevel(self)
         new.title("Volejbalové ihrisko")
+        
+        sirka = 1000
+        vyska = 600
+        p = Canvas(new, width=sirka, height=vyska, bg="wheat")
+        p.pack()
+
+        p.create_rectangle(50, 50, sirka-50, vyska-50, fill="white")
+        p.create_rectangle(60, 60, sirka-60, vyska-60, fill="wheat")
+
+        stlpec = 0
+        while stlpec < vyska+10:
+            for riadok in range(0,50,10):
+                p.create_rectangle((sirka-30)/2+riadok, stlpec, (sirka-30)/2+riadok+10, stlpec+10)
+            stlpec += 10
 
 
 class roles(Frame):    
@@ -35,6 +49,11 @@ class roles(Frame):
         new = tk.Frame.__init__(self)
         new = Toplevel(self)
         new.title("Pravidla")
+
+        p = Canvas(new, width=500, height=400)
+        p.pack()
+
+        p.create_text(0, 0, text="kakakaka")
 
 
 def main(): 
