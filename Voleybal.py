@@ -31,16 +31,21 @@ class volleyball_court(Frame):
         
         sirka = 1000
         vyska = 600
-        p = Canvas(new, width=sirka, height=vyska, bg="wheat")
+        p = Canvas(new, width=sirka, height=vyska, bg="RoyalBlue3")
         p.pack()
 
-        p.create_rectangle(50, 50, sirka-50, vyska-50, fill="white")
-        p.create_rectangle(60, 60, sirka-60, vyska-60, fill="wheat")
+        #court
+        p.create_rectangle(50, 50, sirka-50, vyska-50, fill="white") #outline
+        p.create_rectangle(60, 60, sirka-60, vyska-60, fill="RoyalBlue3") #core
+        p.create_rectangle((sirka-100)/6*2+50-5, 55, (sirka-100)/6*2+50+5, vyska-55, fill="white", outline="white") #left line
+        p.create_rectangle(sirka/2-5, 50, sirka/2+5, vyska-50, fill="white", outline="white") #central line
+        p.create_rectangle((sirka-100)/6*4+50-5, 55, (sirka-100)/6*4+50+5, vyska-55, fill="white", outline="white") #right line
 
+        #net
         stlpec = 0
         while stlpec < vyska+10:
             for riadok in range(0,50,10):
-                p.create_rectangle((sirka-30)/2+riadok, stlpec, (sirka-30)/2+riadok+10, stlpec+10)
+                p.create_rectangle((sirka-30)/2+riadok-10, stlpec, (sirka-30)/2+riadok, stlpec+10)
             stlpec += 10
 
 
