@@ -34,7 +34,7 @@ class Pravidla(Frame):
         new = Toplevel(self)
         new.title("Pravidlá")
 
-        sirka = 1200
+        sirka = 900
         vyska = 400
         p = Canvas(new, width=sirka, height=vyska)
         p.pack()
