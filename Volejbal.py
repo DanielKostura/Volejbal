@@ -30,13 +30,23 @@ def rules():
     new_p.create_text(33, 360, text="Libero:", font=("Calibri", 15, "bold"))
     new_p.create_text(418, 380, text="Tímy môžu mať jedného hráča označeného ako libero, ktorý má obmedzené možnosti útoku, ale môže byť vymenený za ľubovoľného hráča pri podaní.", font=("Calibri", 10,))
 
-def player(action):
+def left_player(action):
     x = action.x
     y = action.y
-    p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
-    p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
-    p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=farba_dresu)
-    p.create_text(x, y, text=cislo, font=("Calibri", 22, "bold"))
+    if y - 15 > 90 and x - 30 > 60 and y + 45 < 540 and x + 30 < width / 2 - 30:
+        p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
+        p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
+        p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=farba_dresu)
+        p.create_text(x, y, text=cislo, font=("Calibri", 22, "bold"))
+
+def right_player(action):
+    x = action.x
+    y = action.y
+    if y - 15 > 90 and x - 30 > width / 2 + 30 and y + 45 < 540 and x + 30 < 940:
+        p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
+        p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
+        p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=farba_dresu)
+        p.create_text(x, y, text=cislo, font=("Calibri", 22, "bold"))
 
 okno = tk.Tk()
 okno.title('Volejbalové ihrisko')
@@ -70,7 +80,7 @@ b.place(x=width-60, y=10)
 # player
 farba_dresu = "blue"
 cislo = "1"
-p.bind_all("<Button-1>", player)
+p.bind_all("<Button-1>", left_player)
 
 # lables
 
