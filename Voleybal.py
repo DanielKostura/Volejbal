@@ -30,8 +30,11 @@ def rules():
     new_p.create_text(33, 360, text="Libero:", font=("Calibri", 15, "bold"))
     new_p.create_text(418, 380, text="Tímy môžu mať jedného hráča označeného ako libero, ktorý má obmedzené možnosti útoku, ale môže byť vymenený za ľubovoľného hráča pri podaní.", font=("Calibri", 10,))
 
-def player():
-    pass
+def player(action):
+    x1, x2, y1, y2 = 200, 300, 200, 300
+    p.create_oval(x1 + 35, y1 - 15, x2 - 35, y2 - 85, fill="wheat")
+    p.create_oval(x1 + 35, y1 + 85, x2 - 35, y2 + 15, fill="wheat")
+    p.create_oval(x1, y1, x2, y2, fill="blue")
 
 okno = tk.Tk()
 okno.title('Volejbalové ihrisko')
@@ -42,7 +45,7 @@ height = 600
 p = tk.Canvas(height=height, width=width, bg='RoyalBlue3')
 p.pack()
 
-#court
+# court
 p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
 p.create_rectangle(60, 60, width - 60, height - 60, fill="RoyalBlue3")  # core
 p.create_rectangle((width - 100) / 6 * 2 + 50 - 5, 55, (width - 100) / 6 * 2 + 50 + 5, height - 55, fill="white",
@@ -58,11 +61,14 @@ while column < height + 10:
         p.create_rectangle((width - 30) / 2 + row - 10, column, (width - 30) / 2 + row, column + 10)
     column += 10
 
-#button
+# button
 b = Button(okno, text = "Pravidlá", command=rules)
 b.place(x=width-60, y=10)
 
-#player
+# player
+p.bind_all("<Button-1>", player)
+
+# lables
 
 
 okno.mainloop()
