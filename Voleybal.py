@@ -1,6 +1,24 @@
 import tkinter as tk
 from tkinter import *
 
+def court():
+    p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
+    p.create_rectangle(60, 60, width - 60, height - 60, fill="RoyalBlue3")  # core
+    p.create_rectangle((width - 100) / 6 * 2 + 50 - 5, 55, (width - 100) / 6 * 2 + 50 + 5, height - 55, fill="white",
+                   outline="white")  # left line
+    p.create_rectangle(width / 2 - 5, 50, width / 2 + 5, height - 50, fill="white", outline="white")  # central line
+    p.create_rectangle((width - 100) / 6 * 4 + 50 - 5, 55, (width - 100) / 6 * 4 + 50 + 5, height - 55, fill="white",
+                   outline="white")  # right line
+    
+    net()
+
+def net():
+    column = 0
+    while column < height + 10:
+        for row in range(0, 50, 10):
+            p.create_rectangle((width - 30) / 2 + row - 10, column, (width - 30) / 2 + row, column + 10)
+        column += 10
+
 def rules():
     new_okno = tk.Toplevel()  # Vytvořte nové okno
     new_okno.title('Pravidlá Volejbalu')
@@ -31,13 +49,71 @@ def rules():
     new_p.create_text(418, 380, text="Tímy môžu mať jedného hráča označeného ako libero, ktorý má obmedzené možnosti útoku, ale môže byť vymenený za ľubovoľného hráča pri podaní.", font=("Calibri", 10,))
 
 def player(action):
-    x1, x2, y1, y2 = 200, 300, 200, 300
-    p.create_oval(x1 + 35, y1 - 15, x2 - 35, y2 - 85, fill="wheat")
-    p.create_oval(x1 + 35, y1 + 85, x2 - 35, y2 + 15, fill="wheat")
-    p.create_oval(x1, y1, x2, y2, fill="blue")
+    x = action.x
+    y = action.y
+    if y - 15 > 90 and x - 30 > 60 and y + 45 < 540 and x + 30 < width / 2 - 30:
+        p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
+        p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
+        p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=left_color_dress)
+        p.create_text(x, y, text=left_num, font=("Calibri", 22, "bold"))
 
-okno = tk.Tk()
-okno.title('Volejbalové ihrisko')
+    elif y - 15 > 90 and x - 30 > width / 2 + 30 and y + 45 < 540 and x + 30 < 940:
+        p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
+        p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
+        p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=right_color_dress)
+        p.create_text(x, y, text=right_num, font=("Calibri", 22, "bold"))
+
+def text():
+    def submit1():
+        global left_color_dress
+        global left_num
+        left_color_dress = color1.get()
+        left_num = num1.get()
+        
+    def submit2():
+        global right_color_dress
+        global right_num
+        right_color_dress = color2.get()
+        right_num = num2.get()
+
+    space = Label(o, text = "").pack()
+    space = Label(o, text = "").pack()
+    space = Label(o, text = "").pack()
+
+    color1 = tk.StringVar()
+    color2 = tk.StringVar()
+    num1 = tk.StringVar()
+    num2 = tk.StringVar()
+
+    # left top text
+    text1 = Label(o, text = "Farbu týmu na ľavo:").place(x = 100, y = height + 12)
+    entry1 = Entry(o,textvariable = color1, font=('calibre',10,'normal')).place(x = 100 + 120,  y = height + 14)
+    
+    # left bot text
+    text2 = Label(o, text = "Číslo hráča na ľavo:").place(x = 100, y = height + 12 + 25)
+    entry2 = Entry(o,textvariable = num1, font=('calibre',10,'normal')).place(x = 100 + 120,  y = height + 14 + 25)
+
+
+    button1 = Button(text = 'OK', command = submit1).place(x = 100 + 120 + 170, y = height + 23)
+    
+    # right top text
+    text3 = Label(o, text = "Farbu týmu na pravo:").place(x = width//2 + 100, y = height + 12)
+    entry3 = Entry(o,textvariable = color2, font=('calibre',10,'normal')).place(x = width//2 + 100 + 120, 
+                                                                                  y = height + 14)
+    
+    # right bot text
+    text4 = Label(o, text = "Číslo hráča na pravo:").place(x = width//2 + 100, y = height + 12 + 25)
+    entry4 = Entry(o,textvariable = num2, font=('calibre',10,'normal')).place(x = width//2 + 100 + 120, y = height + 14 + 25)
+
+
+    button2 = Button(text = 'OK', command = submit2).place(x = width//2 + 100 + 120 + 170, y = height + 23)
+
+def delete(action):
+    p.delete("all")
+    court()
+
+o = tk.Tk()
+o.title('Volejbalové ihrisko')
 
 width = 1000
 height = 600
@@ -45,30 +121,23 @@ height = 600
 p = tk.Canvas(height=height, width=width, bg='RoyalBlue3')
 p.pack()
 
-# court
-p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
-p.create_rectangle(60, 60, width - 60, height - 60, fill="RoyalBlue3")  # core
-p.create_rectangle((width - 100) / 6 * 2 + 50 - 5, 55, (width - 100) / 6 * 2 + 50 + 5, height - 55, fill="white",
-                   outline="white")  # left line
-p.create_rectangle(width / 2 - 5, 50, width / 2 + 5, height - 50, fill="white", outline="white")  # central line
-p.create_rectangle((width - 100) / 6 * 4 + 50 - 5, 55, (width - 100) / 6 * 4 + 50 + 5, height - 55, fill="white",
-                   outline="white")  # right line
+# player details
+left_color_dress = "blue"
+left_num = "1"
 
-# net
-column = 0
-while column < height + 10:
-    for row in range(0, 50, 10):
-        p.create_rectangle((width - 30) / 2 + row - 10, column, (width - 30) / 2 + row, column + 10)
-    column += 10
+right_color_dress = "red"
+right_num = "1"
+
+court()
+text()
 
 # button
-b = Button(okno, text = "Pravidlá", command=rules)
-b.place(x=width-60, y=10)
+b = Button(o, text = "Pravidlá", command=rules)
+b.place(x=width-58, y=10)
 
 # player
 p.bind_all("<Button-1>", player)
 
-# lables
+p.bind_all("d", delete)
 
-
-okno.mainloop()
+o.mainloop()
