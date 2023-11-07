@@ -205,6 +205,8 @@ def delete(action):
     global left_count, right_count
     global left_num_list, right_num_list
     global body_position
+    global seconds, is_running
+
 
     left_color_dress = "green"
     left_num = 1
@@ -217,6 +219,9 @@ def delete(action):
     right_num_list = []
 
     body_position = []
+
+    seconds = 0
+    is_running = False
 
 o = Tk()
 o.title('Volejbalové ihrisko')
