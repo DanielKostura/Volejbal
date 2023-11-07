@@ -1,17 +1,19 @@
 import tkinter as tk
 from tkinter import *
+import random
 
 # player details
-left_color_dress = "blue"
-left_num = "1"
+left_color_dress = "green"
+left_num = 1
 left_count = 0
+left_num_list = []
 
 right_color_dress = "red"
-right_num = "1"
+right_num = 1
 right_count = 0
+right_num_list = []
 
 body_position = []
-arms_position = []
 
 def court():
     p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
@@ -61,53 +63,51 @@ def rules():
     new_p.create_text(418, 380, text="Tímy môžu mať jedného hráča označeného ako libero, ktorý má obmedzené možnosti útoku, ale môže byť vymenený za ľubovoľného hráča pri podaní.", font=("Calibri", 10,))
 
 def player(action):
-    global right_count
-    global left_count
+    global right_count, left_count
+    global right_num_list, left_num_list
+    global right_num, left_num
 
     x = action.x
     y = action.y
 
-    free = overlay(x, y)
+    free_place = overlay(x, y)
 
-    if y - 15 > 90 and x - 30 > 60 and y + 45 < 540 and x + 30 < width / 2 - 25 and left_count < 6 and free == True:
+    if y - 15 > 90 and x - 30 > 60 and y + 45 < 540 and x + 30 < width / 2 - 25 and left_count < 6 and free_place == True:
         p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
         p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
         p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=left_color_dress)
+
+        while left_num in left_num_list:
+            left_num = random.randint(1, 99)
         p.create_text(x, y, text=left_num, font=("Calibri", 22, "bold"))
+        left_num_list.append(left_num)
 
         body_position.append(x)
         body_position.append(y)
-        arms_position.append(x)
-        arms_position.append(y-30)
-        arms_position.append(x)
-        arms_position.append(y+30)
         left_count += 1
 
-    elif y - 15 > 90 and x - 30 > width / 2 + 25 and y + 45 < 540 and x + 30 < 940 and right_count < 6 and free == True:
+    elif y - 15 > 90 and x - 30 > width / 2 + 25 and y + 45 < 540 and x + 30 < 940 and right_count < 6 and free_place == True:
         p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
         p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
         p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=right_color_dress)
+
+        while right_num in right_num_list:
+            right_num = random.randint(1, 99)
         p.create_text(x, y, text=right_num, font=("Calibri", 22, "bold"))
+        right_num_list.append(right_num)
+        
         body_position.append(x)
         body_position.append(y)
-        arms_position.append(x)
-        arms_position.append(y-30)
-        arms_position.append(x)
-        arms_position.append(y+30)
         right_count += 1
+
+    pass
 
 def overlay(x, y):
     for i in range(0, len(body_position), 2):
         border = ((body_position[i]-x) ** 2 + (body_position[i+1]-y) ** 2) ** 0.5
-        if border < 60:
-            print("BBBBBBBBBBBBBBBBB")
-            return False
-    
-    for i in range(0, len(arms_position), 4):
-        border1 = ((arms_position[i]-x) ** 2 + (arms_position[i+1]-y) ** 2) ** 0.5
-        border2 = ((arms_position[i+2]-x) ** 2 + (arms_position[i+3]-y) ** 2) ** 0.5
-        if border1 < 30 or border2 < 30:
-            print("AAAAAAAAAAAA")
+        border1 = ((body_position[i]-x) ** 2 + (body_position[i+1]-y+60) ** 2) ** 0.5
+        border2 = ((body_position[i]-x) ** 2 + (body_position[i+1]-y-60) ** 2) ** 0.5
+        if border1 < 30 or border2 < 30 or border < 65:
             return False
     return True
 
@@ -116,17 +116,18 @@ def text():
         global left_color_dress
         global left_num
         left_color_dress = color1.get()
-        left_num = num1.get()
+        left_num = int(num1.get())
         
     def submit2():
         global right_color_dress
         global right_num
         right_color_dress = color2.get()
-        right_num = num2.get()
+        right_num = int(num2.get())
 
-    space = Label(o, text = "").pack()
-    space = Label(o, text = "").pack()
-    space = Label(o, text = "").pack()
+    # adding space
+    Label(o, text = "").pack()
+    Label(o, text = "").pack()
+    Label(o, text = "").pack()
 
     color1 = tk.StringVar()
     color2 = tk.StringVar()
@@ -134,37 +135,47 @@ def text():
     num2 = tk.StringVar()
 
     # left top text
-    text1 = Label(o, text = "Farbu týmu na ľavo:").place(x = 100, y = height + 12)
-    entry1 = Entry(o,textvariable = color1, font=('calibre',10,'normal')).place(x = 100 + 120,  y = height + 14)
-    
+    Label(o, text = "Farbu týmu na ľavo:").place(x = 100, 
+                                                 y = height + 12)
+    Entry(o,textvariable = color1, font=('calibre',10,'normal')).place(x = 100 + 120, 
+                                                                       y = height + 14)
     # left bot text
-    text2 = Label(o, text = "Číslo hráča na ľavo:").place(x = 100, y = height + 12 + 25)
-    entry2 = Entry(o,textvariable = num1, font=('calibre',10,'normal')).place(x = 100 + 120,  y = height + 14 + 25)
+    Label(o, text = "Číslo hráča na ľavo:").place(x = 100, 
+                                                  y = height + 12 + 25)
+    Entry(o,textvariable = num1, font=('calibre',10,'normal')).place(x = 100 + 120, 
+                                                                     y = height + 14 + 25)
+    # left button
+    Button(text = 'OK', command = submit1).place(x = 100 + 120 + 170, 
+                                                 y = height + 23)
 
-
-    button1 = Button(text = 'OK', command = submit1).place(x = 100 + 120 + 170, y = height + 23)
-    
     # right top text
-    text3 = Label(o, text = "Farbu týmu na pravo:").place(x = width//2 + 100, y = height + 12)
-    entry3 = Entry(o,textvariable = color2, font=('calibre',10,'normal')).place(x = width//2 + 100 + 120, 
-                                                                                  y = height + 14)
-    
+    Label(o, text = "Farbu týmu na pravo:").place(x = width//2 + 100, 
+                                                  y = height + 12)
+    Entry(o,textvariable = color2, font=('calibre',10,'normal')).place(x = width//2 + 100 + 120, 
+                                                                       y = height + 14)
     # right bot text
-    text4 = Label(o, text = "Číslo hráča na pravo:").place(x = width//2 + 100, y = height + 12 + 25)
-    entry4 = Entry(o,textvariable = num2, font=('calibre',10,'normal')).place(x = width//2 + 100 + 120, y = height + 14 + 25)
-
-
-    button2 = Button(text = 'OK', command = submit2).place(x = width//2 + 100 + 120 + 170, y = height + 23)
+    Label(o, text = "Číslo hráča na pravo:").place(x = width//2 + 100, 
+                                                   y = height + 12 + 25)
+    Entry(o,textvariable = num2, font=('calibre',10,'normal')).place(x = width//2 + 100 + 120, 
+                                                                     y = height + 14 + 25)
+    #right
+    Button(text = 'OK', command = submit2).place(x = width//2 + 100 + 120 + 170, 
+                                                 y = height + 23)
 
 def delete(action):
     p.delete("all")
     court()
-    global left_count
-    global right_count
+
+    global left_count, right_count
+    global left_num_list, right_num_list
+    global body_position
+
     left_count = 0
     right_count = 0
+    
+    left_num_list = []
+    right_num_list = []
     body_position = []
-    arms_position = []
 
 o = tk.Tk()
 o.title('Volejbalové ihrisko')
@@ -178,13 +189,11 @@ p.pack()
 court()
 text()
 
-# button
-b = Button(o, text = "Pravidlá", command=rules)
-b.place(x=width-58, y=10)
+# button Pravidlá
+Button(o, text = "Pravidlá", command=rules).place(x=width-58, y=10)
 
 # player
 p.bind_all("<Button-1>", player)
-
 p.bind_all("<Button-3>", delete)
 
 o.mainloop()
