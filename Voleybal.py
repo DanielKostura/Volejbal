@@ -10,6 +10,9 @@ right_color_dress = "red"
 right_num = "1"
 right_count = 0
 
+body_position = []
+arms_position = []
+
 def court():
     p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
     p.create_rectangle(60, 60, width - 60, height - 60, fill="RoyalBlue3")  # core
@@ -64,19 +67,49 @@ def player(action):
     x = action.x
     y = action.y
 
-    if y - 15 > 90 and x - 30 > 60 and y + 45 < 540 and x + 30 < width / 2 - 25 and left_count < 6:
+    free = overlay(x, y)
+
+    if y - 15 > 90 and x - 30 > 60 and y + 45 < 540 and x + 30 < width / 2 - 25 and left_count < 6 and free == True:
         p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
         p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
         p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=left_color_dress)
         p.create_text(x, y, text=left_num, font=("Calibri", 22, "bold"))
+
+        body_position.append(x)
+        body_position.append(y)
+        arms_position.append(x)
+        arms_position.append(y-30)
+        arms_position.append(x)
+        arms_position.append(y+30)
         left_count += 1
 
-    elif y - 15 > 90 and x - 30 > width / 2 + 25 and y + 45 < 540 and x + 30 < 940 and right_count < 6:
+    elif y - 15 > 90 and x - 30 > width / 2 + 25 and y + 45 < 540 and x + 30 < 940 and right_count < 6 and free == True:
         p.create_oval(x - 15, y - 15, x + 15, y - 45, fill="wheat")
         p.create_oval(x - 15, y + 15, x + 15, y + 45, fill="wheat")
         p.create_oval(x - 30, y - 30, x + 30, y + 30, fill=right_color_dress)
         p.create_text(x, y, text=right_num, font=("Calibri", 22, "bold"))
+        body_position.append(x)
+        body_position.append(y)
+        arms_position.append(x)
+        arms_position.append(y-30)
+        arms_position.append(x)
+        arms_position.append(y+30)
         right_count += 1
+
+def overlay(x, y):
+    for i in range(0, len(body_position), 2):
+        border = ((body_position[i]-x) ** 2 + (body_position[i+1]-y) ** 2) ** 0.5
+        if border < 60:
+            print("BBBBBBBBBBBBBBBBB")
+            return False
+    
+    for i in range(0, len(arms_position), 4):
+        border1 = ((arms_position[i]-x) ** 2 + (arms_position[i+1]-y) ** 2) ** 0.5
+        border2 = ((arms_position[i+2]-x) ** 2 + (arms_position[i+3]-y) ** 2) ** 0.5
+        if border1 < 30 or border2 < 30:
+            print("AAAAAAAAAAAA")
+            return False
+    return True
 
 def text():
     def submit1():
@@ -130,6 +163,8 @@ def delete(action):
     global right_count
     left_count = 0
     right_count = 0
+    body_position = []
+    arms_position = []
 
 o = tk.Tk()
 o.title('Volejbalové ihrisko')
