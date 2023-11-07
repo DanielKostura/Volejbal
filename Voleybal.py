@@ -15,6 +15,9 @@ right_num_list = []
 
 body_position = []
 
+seconds = 0
+is_running = False
+
 def court():
     p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
     p.create_rectangle(60, 60, width - 60, height - 60, fill="RoyalBlue3")  # core
@@ -128,6 +131,7 @@ def text():
     Label(o, text = "").pack()
     Label(o, text = "").pack()
     Label(o, text = "").pack()
+    Label(o, text = "").pack()
 
     color1 = tk.StringVar()
     color2 = tk.StringVar()
@@ -162,32 +166,70 @@ def text():
     Button(text = 'OK', command = submit2).place(x = width//2 + 100 + 120 + 170, 
                                                  y = height + 23)
 
+def timer():
+    def start_timer():
+        global is_running
+        if not is_running:
+            is_running = True
+            start_button.config(text="Stop")
+            update_timer()
+        else:
+            is_running = False
+            start_button.config(text="Start")
+
+    def update_timer():
+        global is_running, seconds
+        if is_running:
+            seconds += 1
+            update_time()
+            o.after(1000, update_timer)
+
+    def update_time():
+        minutes = seconds // 60
+        seconds_display = seconds % 60
+        time_label.config(text=f"{minutes}:{seconds_display:02}")
+
+    global time_label
+    time_label = Label(o, text="0:00", font=("Helvetica", 42))
+    time_label.place(x=width // 2 - 55, y=height+2)
+
+    start_button = Button(o, text="Start", command=start_timer)
+    start_button.place(x=width//2-18, y=height+60)
+
 def delete(action):
     p.delete("all")
     court()
 
+    global left_color_dress, right_color_dress
+    global left_num, right_num
     global left_count, right_count
     global left_num_list, right_num_list
     global body_position
 
+    left_color_dress = "green"
+    left_num = 1
     left_count = 0
-    right_count = 0
-    
     left_num_list = []
+
+    right_color_dress = "red"
+    right_num = 1
+    right_count = 0
     right_num_list = []
+
     body_position = []
 
-o = tk.Tk()
+o = Tk()
 o.title('Volejbalové ihrisko')
 
 width = 1000
 height = 600
 
-p = tk.Canvas(height=height, width=width, bg='RoyalBlue3')
+p = Canvas(height=height, width=width, bg='RoyalBlue3')
 p.pack()
 
 court()
 text()
+timer()
 
 # button Pravidlá
 Button(o, text = "Pravidlá", command=rules).place(x=width-58, y=10)
