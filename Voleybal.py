@@ -18,6 +18,8 @@ body_position = []
 seconds = 0
 is_running = False
 
+colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'brown', 'gray', 'cyan', 'white', 'black']
+
 def court():
     p.create_rectangle(50, 50, width - 50, height - 50, fill="white")  # outline
     p.create_rectangle(60, 60, width - 60, height - 60, fill="RoyalBlue3")  # core
@@ -116,17 +118,26 @@ def overlay(x, y):
 
 def text():
     def submit1():
-        global left_color_dress
+        global left_color_dress, right_color_dress
+        global left_count
         global left_num
-        left_color_dress = color1.get()
-        left_num = int(num1.get())
-        
-    def submit2():
-        global right_color_dress
-        global right_num
-        right_color_dress = color2.get()
-        right_num = int(num2.get())
 
+        current_color_dress = color1.get()
+        if current_color_dress != right_color_dress and current_color_dress in colors and left_count == 0:
+            left_color_dress = current_color_dress
+        
+        left_num = int(num1.get())
+
+    def submit2():
+        global right_color_dress, left_color_dress
+        global right_count
+        global right_num
+
+        current_color_dress = color2.get()
+        if current_color_dress != left_color_dress and current_color_dress in colors and right_count == 0:
+            right_color_dress = current_color_dress
+
+        right_num = int(num2.get())
     # adding space
     Label(o, text = "").pack()
     Label(o, text = "").pack()
