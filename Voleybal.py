@@ -243,7 +243,7 @@ height = 600
 p = Canvas(height=height, width=width, bg='RoyalBlue3')
 p.pack()
 
-court()
+court()  
 text()
 timer()
 
